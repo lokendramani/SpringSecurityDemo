@@ -12,6 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import static com.example.demo.config.ApplicationUserRoles.ADMIN;
+import static com.example.demo.config.ApplicationUserRoles.STUDENT;
+
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -22,6 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/","index","/css/*","/js/*").permitAll()
+                .antMatchers("/apps/v1/students/*").hasAnyRole(STUDENT.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -32,9 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
-        UserDetails lokendraUser = User.builder().username("lokendra").password(passwordEncoder().encode("password")).roles("STUDENT").build();
+        UserDetails lokendraUser = User.builder().username("lokendra").password(passwordEncoder().encode("password")).roles(STUDENT.name()).build();
 
-        return  new InMemoryUserDetailsManager(lokendraUser);
+        UserDetails adminUser = User.builder().username("admin").password(passwordEncoder().encode("password")).roles(ADMIN.name()).build();
+
+        return  new InMemoryUserDetailsManager(lokendraUser,adminUser);
 
     }
 
