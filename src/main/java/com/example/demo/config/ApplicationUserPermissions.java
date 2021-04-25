@@ -2,9 +2,9 @@ package com.example.demo.config;
 
 public enum ApplicationUserPermissions {
     STUDENT_READ("student:read"),
-    STUDENT_WRITE("student:read"),
-    COURSE_READ("student:read"),
-    COURSE_WRITE("student:read");
+    STUDENT_WRITE("student:write"),
+    COURSE_READ("course:read"),
+    COURSE_WRITE("course:write");
 
     public String getPermission() {
         return permission;
